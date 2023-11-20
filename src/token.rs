@@ -1,48 +1,44 @@
-use anyhow::anyhow;
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Token {
     token_type: String,
     literal: String,
 }
 
 impl Token {
-    pub fn new(token_type: &str, literal: &str) -> Token {
-        println!("Creating<{}, {}>", token_type, literal);
-        Token {
+    #[must_use]
+    pub fn new(token_type: &str, literal: &str) -> Self {
+        Self {
             token_type: String::from(token_type),
             literal: String::from(literal),
         }
     }
 
-    fn lookup(literal: &str) -> Result<Token, anyhow::Error> {
-        println!("Looking up: {}", literal);
-
+    fn lookup(literal: &str) -> Self {
         match literal {
-            "fn" => Ok(Token::new(FUNCTION, "fn")),
-            "let" => Ok(Token::new(LET, "let")),
-            "true" => Ok(Token::new(TRUE, "true")),
-            "false" => Ok(Token::new(FALSE, "false")),
-            "if" => Ok(Token::new(IF, "if")),
-            "else" => Ok(Token::new(ELSE, "else")),
-            "return" => Ok(Token::new(RETURN, "return")),
-            "=" => Ok(Token::new(ASSIGN, "=")),
-            ";" => Ok(Token::new(SEMICOLON, ";")),
-            "(" => Ok(Token::new(LPAREN, "(")),
-            ")" => Ok(Token::new(RPAREN, ")")),
-            "," => Ok(Token::new(COMMA, ",")),
-            "+" => Ok(Token::new(PLUS, "+")),
-            "{" => Ok(Token::new(LBRACE, "{")),
-            "}" => Ok(Token::new(RBRACE, "}")),
-            "!" => Ok(Token::new(BANG, "!")),
-            "-" => Ok(Token::new(MINUS, "-")),
-            "/" => Ok(Token::new(SLASH, "/")),
-            "*" => Ok(Token::new(ASTERISK, "*")),
-            "<" => Ok(Token::new(LT, "<")),
-            ">" => Ok(Token::new(GT, ">")),
-            "==" => Ok(Token::new(EQ, "==")),
-            "!=" => Ok(Token::new(NOT_EQ, "!=")),
-            _ => Ok(Token::new(IDENT, literal)),
+            "fn" => Self::new(FUNCTION, "fn"),
+            "let" => Self::new(LET, "let"),
+            "true" => Self::new(TRUE, "true"),
+            "false" => Self::new(FALSE, "false"),
+            "if" => Self::new(IF, "if"),
+            "else" => Self::new(ELSE, "else"),
+            "return" => Self::new(RETURN, "return"),
+            "=" => Self::new(ASSIGN, "="),
+            ";" => Self::new(SEMICOLON, ";"),
+            "(" => Self::new(LPAREN, "("),
+            ")" => Self::new(RPAREN, ")"),
+            "," => Self::new(COMMA, ","),
+            "+" => Self::new(PLUS, "+"),
+            "{" => Self::new(LBRACE, "{"),
+            "}" => Self::new(RBRACE, "}"),
+            "!" => Self::new(BANG, "!"),
+            "-" => Self::new(MINUS, "-"),
+            "/" => Self::new(SLASH, "/"),
+            "*" => Self::new(ASTERISK, "*"),
+            "<" => Self::new(LT, "<"),
+            ">" => Self::new(GT, ">"),
+            "==" => Self::new(EQ, "=="),
+            "!=" => Self::new(NOT_EQ, "!="),
+            _ => Self::new(IDENT, literal),
         }
     }
 }
@@ -51,7 +47,7 @@ impl TryFrom<String> for Token {
     type Error = anyhow::Error;
 
     fn try_from(input: String) -> Result<Self, anyhow::Error> {
-        Ok(Token::lookup(&input)?)
+        Ok(Self::lookup(&input))
     }
 }
 
@@ -59,7 +55,7 @@ impl TryFrom<i32> for Token {
     type Error = anyhow::Error;
 
     fn try_from(input: i32) -> Result<Self, anyhow::Error> {
-        Ok(Token::new(INT, &input.to_string())) 
+        Ok(Self::new(INT, &input.to_string()))
     }
 }
 

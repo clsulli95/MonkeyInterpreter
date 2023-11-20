@@ -1,6 +1,5 @@
-pub mod token;
+//! A Interpreter for the Monkey language
 pub mod lexer;
+pub mod token;
 
-fn main() {
-    println!("Hello, world!");
-}
+fn main() {}
