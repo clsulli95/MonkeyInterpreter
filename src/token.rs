@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq, Eq)]
 pub struct Token {
-    token_type: String,
-    literal: String,
+    pub token_type: String,
+    pub literal: String,
 }
 
 impl Token {
