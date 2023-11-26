@@ -1,50 +1,46 @@
+use core::fmt;
+
 use crate::token;
 
-trait Node {
-    fn token_literal(&self) -> String;
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Statement {
+    Let(Identifier, Expression),
+    Return(Expression),
+    Expression(token::Token, Expression),
 }
 
-trait Statement: Node {
-    fn statement_node(&self);
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Expression {
+    Identifier(token::Token),
+    Integer(token::Token),
 }
 
-trait Expression: Node {
-    fn expression_node(&self);
+#[derive(Default, Debug)]
+pub struct Program {
+    pub statements: Vec<Statement>,
 }
 
-struct Program {
-    statements: Vec<Box<dyn Statement>>,
+impl fmt::Display for Program {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "PROGRAM: \n")?;
+        for (idx, statement) in self.statements.iter().enumerate() {
+            write!(f, "--- {}: {:?}\n", idx, statement)?;
+        }
+        Ok(())
+    }
 }
 
-impl Node for Program {
-    fn token_literal(&self) -> String {
-        if let Some(statement) = self.statements.first() {
-            statement.token_literal()
-        } else {
-            "".to_string()
+#[derive(Default, Clone, Debug, PartialEq, Eq)]
+pub struct Identifier {
+    pub token: token::Token,
+    pub value: String,
+}
+
+impl Identifier {
+    pub fn new(token: token::Token, value: &str) -> Self {
+        Self {
+            token,
+            value: value.to_owned(),
         }
     }
-}
-
-struct LetStatement {
-    token: token::Token,
-    name: String,
-    value: Box<dyn Expression>,
-}
-
-impl Node for LetStatement {
-    fn token_literal(&self) -> String {
-        self.token.literal.clone()
-    }
-}
-
-impl Statement for LetStatement {
-    fn statement_node(&self) {
-        todo!()
-    }
-}
-
-struct Identifier {
-    token: token::Token,
-    value: String,
 }

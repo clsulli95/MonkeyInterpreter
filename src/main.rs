@@ -1,6 +1,7 @@
 //! A Interpreter for the Monkey language
 pub mod ast;
 pub mod lexer;
+pub mod parser;
 pub mod repl;
 pub mod token;
 
